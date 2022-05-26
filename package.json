@@ -6,9 +6,12 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest"
   },
   "devDependencies": {
+    "@iconify-json/fa": "^1.1.1",
+    "@iconify-json/fa-solid": "^1.1.1",
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.11",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@tsconfig/svelte": "^2.0.1",
@@ -17,7 +20,9 @@
     "svelte-preprocess": "^4.7.2",
     "tslib": "^2.2.0",
     "typescript": "^4.3.2",
-    "vite": "^2.6.4"
+    "unplugin-icons": "^0.14.3",
+    "vite": "^2.6.4",
+    "vitest": "^0.12.9"
   },
   "dependencies": {
     "prettier": "^2.4.1",

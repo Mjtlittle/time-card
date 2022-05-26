@@ -1,74 +1,46 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
 
+  import About from "./components/About.svelte";
+  import ActionBar from "./components/ActionBar.svelte";
   import ConfirmButton from "./components/ConfirmButton.svelte";
   import DayInput from "./components/DayInput.svelte";
-  import Operations from "./components/Operations.svelte";
+  import DayProgress from "./components/DayProgress.svelte";
+  import Information from "./components/Information.svelte";
   import Preferences from "./components/Preferences.svelte";
+  import { default_settings, settings } from "./lib/settings";
   import {
-    ClockedDay,
     data_localstorage_key,
-    day_complete,
-    day_hours,
-    live_day_hours,
-    make_day,
-    round_time,
+    Day,
+    predict_week,
+    weekdays,
+    work_weekdays,
   } from "./lib/utility";
-  import {
-    lunch_minutes,
-    target_week_hours,
-    usual_start_time,
-    hourly_pay_rate,
-    overtime_pay_rate,
-    show_pay,
-  } from "./lib/work_context";
   import "./styles/global.scss";
 
-  let days: ClockedDay[] = [{}, {}, {}, {}, {}];
-  const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  let days: Day[] = work_weekdays.map((weekday) => ({
+    weekday,
+    clock: { start: null, end: null },
+    pre_clock: { start: null, end: null },
+    enabled: true,
+  }));
 
-  let live_hours = 0;
-  let base_pay = 0;
-  let overtime_pay = 0;
-  $: days, $lunch_minutes, recompute_live_hours();
-  $: live_hours, $overtime_pay_rate, $hourly_pay_rate, recompute_pay();
-
-  const recompute_live_hours = () => {
-    live_hours = days.map(live_day_hours).reduce((acc, v) => acc + v, 0);
-  };
-
-  const recompute_pay = () => {
-    base_pay = Math.min($target_week_hours, live_hours) * $hourly_pay_rate;
-    if (live_hours < $target_week_hours) {
-      overtime_pay = 0;
-      return;
-    }
-    overtime_pay =
-      (live_hours - $target_week_hours) * $overtime_pay_rate * $hourly_pay_rate;
-  };
+  $: predict_week(days, $settings), (days = [...days]);
 
   const save = () => {
     const data = {
       days,
-      lunch_minutes: $lunch_minutes,
-      target_week_hours: $target_week_hours,
-      usual_start_time: $usual_start_time,
-      hourly_pay_rate: $hourly_pay_rate,
-      overtime_pay_rate: $overtime_pay_rate,
-      show_pay: $show_pay,
+      settings: $settings,
     };
     localStorage.setItem(data_localstorage_key, JSON.stringify(data));
   };
 
   const load = () => {
-    const data = JSON.parse(localStorage.getItem(data_localstorage_key));
+    const data_string = localStorage.getItem(data_localstorage_key);
+    if (data_string == null) return;
+    const data = JSON.parse(data_string);
     days = data.days;
-    $lunch_minutes = data.lunch_minutes;
-    $target_week_hours = data.target_week_hours;
-    $usual_start_time = data.usual_start_time;
-    $hourly_pay_rate = data.hourly_pay_rate;
-    $overtime_pay_rate = data.overtime_pay_rate;
-    $show_pay = data.show_pay;
+    $settings = { ...default_settings, ...data.settings };
   };
 
   onMount(load);
@@ -83,69 +55,112 @@
 </script>
 
 <div class="container">
-  <div>
-    <div>
-      <strong>Payed Time:</strong>
-      {live_hours.toFixed(2)} hours
-      {#if $show_pay}
-        <br />
-        <strong>Total Pay:</strong> ${(base_pay + overtime_pay).toFixed(2)}
-      {/if}
-      {#if Math.floor(overtime_pay) > 0}
-        <br />
-        <strong>Overtime:</strong>
-        {(live_hours - $target_week_hours).toFixed(2)} hours
-        {#if $show_pay}(${overtime_pay.toFixed(2)}){/if}
-      {/if}
-    </div>
-    <progress value={live_hours} max={$target_week_hours} />
+  <div class="header">
+    <h1>
+      <a href="https://github.com/Mjtlittle/time-card" class="secret">
+        🕰️ Time Card
+      </a>
+    </h1>
+    <span>
+      Made by
+      <a href="https://github.com/Mjtlittle">Joshua Little</a>
+    </span>
   </div>
 
-  <div>
+  <Information bind:days />
+  <DayProgress bind:days />
+
+  <div class="table">
     <table>
       <thead>
-        <th>Weekday</th>
-        <th>Clock-In</th>
-        <th>Clock-Out</th>
+        <th class="weekday">Weekday</th>
+        <th />
+        <th>Clock-in</th>
+        <th>Clock-out</th>
         <th>Hours</th>
-        <th>Operations</th>
+        {#if !$settings.minimal_mode}
+          <th />
+        {/if}
       </thead>
       <tbody>
-        {#each days as day, i}
-          <DayInput bind:day weekday={weekdays[i]} />
+        {#each days as day}
+          <DayInput bind:day />
         {/each}
       </tbody>
     </table>
+
+    <ActionBar bind:days />
   </div>
 
-  <Operations bind:days />
+  <div class="toggles">
+    <Preferences {reset_app} />
+    <!-- <About /> -->
+  </div>
 
-  <Preferences {reset_app} />
+  <div class="space" />
 </div>
 
 <style lang="scss">
-  details {
-    margin-top: 0.5rem;
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    a.secret {
+      text-decoration: none;
+      color: inherit;
+      &:hover {
+        color: inherit;
+      }
+      &:active {
+        color: inherit;
+      }
+    }
+
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: rgb(49, 49, 49);
+      &:hover {
+        color: var(--hover-color);
+      }
+      &:active {
+        color: var(--active-color);
+      }
+    }
   }
 
   .container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
+    align-items: center;
+
+    .weekday {
+      text-align: left;
+    }
   }
 
-  .day-stack {
+  .toggles {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-top: 0.5rem;
   }
 
-  thead {
-    text-align: center;
+  .table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
   }
 
-  progress {
-    width: 20rem;
+  .space {
+    height: 3rem;
   }
 </style>

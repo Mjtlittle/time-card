@@ -1,32 +1,85 @@
 <script lang="ts">
-  import type { Time } from "../lib/utility";
+  import { format_time, OptionalTime, parse_time } from "../lib/utility";
 
-  export let value: Time = undefined;
-  let input_value = undefined;
+  export let value: OptionalTime = null;
+  export let disabled: boolean = false;
+  export let shadow_time: OptionalTime = null;
+  export let show_shadow: boolean = true;
 
-  const format_time = ([hour, minute]: Time) => {
-    const hour_string = String(hour).padStart(2, "0");
-    const minute_string = String(minute).padStart(2, "0");
-    return `${hour_string}:${minute_string}`;
+  type State = "passed" | "inprogress" | "future";
+
+  let state: State = "future";
+
+  let shadow_time_text = "";
+  $: shadow_time_text =
+    shadow_time == null || !show_shadow ? "-- : --" : format_time(shadow_time);
+
+  $: populate(value);
+
+  const validate_input = () => {
+    const result = parse_time(input_value);
+    populate(result);
+    value = result;
   };
 
-  $: {
-    if (value != undefined) input_value = format_time(value);
-    else input_value = "";
-  }
-
-  const update_value = (event) => {
-    input_value = event.target.value;
-
-    if (input_value == "") value = null;
-    else value = input_value.split(":").map((n) => parseInt(n));
+  const populate = (time: OptionalTime) => {
+    if (time === null) {
+      input_value = "";
+      return;
+    }
+    const time_string = format_time(time);
+    input_value = time_string;
   };
+
+  const handle_keypress = (event: KeyboardEvent) => {
+    if (event.code === "Enter") validate_input();
+  };
+
+  const select_all = () => {
+    input_element.select();
+  };
+
+  const clear = () => {
+    value = null;
+  };
+
+  let input_element;
+  let input_value;
 </script>
 
-<input class="input" type="time" value={input_value} on:change={update_value} />
+<input
+  type="text"
+  class:green={state == "passed"}
+  class:yellow={state == "inprogress"}
+  bind:this={input_element}
+  bind:value={input_value}
+  on:focusout={validate_input}
+  on:keyup={handle_keypress}
+  on:focus={select_all}
+  placeholder={shadow_time_text}
+  {disabled}
+/>
+
+<button on:click={clear} {disabled}>x</button>
 
 <style lang="scss">
   input {
-    width: 7rem;
+    &::placeholder {
+      color: var(--prediction-color);
+    }
+    width: 5rem;
+  }
+
+  .green {
+    background-color: rgb(62, 130, 62);
+    color: white;
+
+    &:placeholder-shown {
+      background-color: rgb(174, 234, 174);
+    }
+
+    &::placeholder {
+      color: rgb(61, 61, 61);
+    }
   }
 </style>

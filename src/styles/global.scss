@@ -1,4 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&display=swap");
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
   padding: 1rem;
+}
+
+input,
+button {
+  padding: 0.3rem 0.5rem;
+}
+
+input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.3rem;
+  margin: 0;
+}
+
+:root {
+  --prediction-color: lightgray;
+
+  --hover-color: rgb(112, 112, 112);
+  --active-color: rgb(168, 168, 168);
 }

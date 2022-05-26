@@ -28,6 +28,7 @@
 <style lang="scss">
   button {
     position: relative;
+    min-width: 7rem;
   }
   .hidden {
     opacity: 0;
@@ -36,7 +37,7 @@
   .confirmation {
     position: absolute;
     left: 0;
-    top: 1px;
+    top: 4px;
     width: 100%;
     height: 100%;
     text-align: center;

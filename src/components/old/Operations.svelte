@@ -6,8 +6,7 @@
     live_day_hours,
     make_day,
     round_time,
-  } from "../lib/utility";
-
+  } from "../../../lib/utility";
   import {
     lunch_minutes,
     target_week_hours,
@@ -15,8 +14,8 @@
     hourly_pay_rate,
     overtime_pay_rate,
     show_pay,
-  } from "../lib/work_context";
-  import ConfirmButton from "./ConfirmButton.svelte";
+  } from "../../../lib/settings";
+  import C../lib/settings./ConfirmButton.svelte";
 
   export let days: ClockedDay[];
 
@@ -25,6 +24,7 @@
     days.forEach((day) => {
       if (day.end && !day.start) day.start = $usual_start_time;
     });
+    days = [...days];
 
     // compute hours left till target
     const total_hours = days.map(day_hours).reduce((acc, v) => acc + v);
