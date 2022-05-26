@@ -35,12 +35,55 @@
     localStorage.setItem(data_localstorage_key, JSON.stringify(data));
   };
 
+  const restore_defaults = () => {
+    console.warn("RESTORED DEFAULTS");
+    $settings = default_settings;
+    days = work_weekdays.map((weekday) => ({
+      weekday,
+      clock: { start: null, end: null },
+      pre_clock: { start: null, end: null },
+      enabled: true,
+    }));
+    save();
+  };
+
   const load = () => {
+    // try pulling the local storage
     const data_string = localStorage.getItem(data_localstorage_key);
-    if (data_string == null) return;
-    const data = JSON.parse(data_string);
-    days = data.days;
-    $settings = { ...default_settings, ...data.settings };
+    if (data_string == null) {
+      restore_defaults();
+      return;
+    }
+
+    // try parsing the data from localstore
+    try {
+      const data = JSON.parse(data_string);
+      days = data.days;
+      $settings = { ...default_settings, ...data.settings };
+      save();
+    } catch (e) {
+      restore_defaults();
+    }
+
+    // try hitting all possible vars
+    try {
+      if (
+        days
+          .map((day) => [
+            day.clock.start,
+            day.clock.end,
+            day.pre_clock.start,
+            day.pre_clock.end,
+            day.enabled,
+            day.weekday,
+          ])
+          .reduce((acc, v) => [...acc, ...v], [])
+          .some((v) => v === undefined)
+      )
+        restore_defaults();
+    } catch (e) {
+      restore_defaults();
+    }
   };
 
   onMount(load);
