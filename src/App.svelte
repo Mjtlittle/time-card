@@ -117,7 +117,9 @@
     <table>
       <thead>
         <th class="weekday">Weekday</th>
-        <th />
+        {#if !$settings.minimal_mode}
+          <th />
+        {/if}
         <th>Clock-in</th>
         <th>Clock-out</th>
         <th>Hours</th>

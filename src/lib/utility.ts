@@ -294,54 +294,14 @@ export const predict_week = (days: Day[], settings: Settings) => {
   for (let i = 0; i < days.length; i++) days[i] = { ...days[i] };
 };
 
-/*
+export const round_time = (time: Time, nearest: number = 15): Time => {
+  let hours = Math.floor(time / 60);
+  let minutes = Math.floor(time % 60);
+  minutes = Math.round(minutes / nearest) * nearest;
 
-export const get_lunch_hours = () => get(lunch_minutes) / 60;
-
-// const _make_day_from_start = (old_day: ClockedDay, hours: number): ClockedDay {
-//   const day: ClockedDay = { ...old_day };
-
-//   if (!day.start && !day.end) day.start = get(usual_start_time);
-
-//   const start_hours = time_to_hours(day.start);
-//   const end_hours = start_hours + hours + get(lunch_minutes) / 60;
-//   day.end = hours_to_time(end_hours);
-
-//   return day;
-// }
-
-// const _make_day_from_end = (old_day: ClockedDay, hours: number): ClockedDay {
-//   const day: ClockedDay = { ...old_day };
-
-//   if (!day.start && !day.end) day.start = get(usual_start_time);
-
-//   const start_hours = time_to_hours(day.start);
-//   const end_hours = start_hours + hours + get(lunch_minutes) / 60;
-//   day.end = hours_to_time(end_hours);
-
-//   return day;
-// }
-
-export const round_time = (day: Time, nearest: number = 15): Time => {
-  const [hours, minutes] = day;
-  const result: Time = [
-    Math.floor(hours),
-    Math.round(minutes / nearest) * nearest,
-  ];
-  if (result[1] >= 60) {
-    result[0] += 1;
-    result[1] -= 60;
+  if (minutes >= 60) {
+    hours += 1;
+    minutes -= 60;
   }
-  return result;
+  return hours * 60 + minutes;
 };
-
-export const add_hours = (time: Time, hours: number): Time => {
-  const new_hours = time_to_hours(time) + hours;
-  if (new_hours >= 24) return time;
-  return hours_to_time(new_hours);
-};
-
-// export const subtract_range = (day: TimeRange, range: TimeRange) => {
-
-// };
-*/

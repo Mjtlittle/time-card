@@ -102,7 +102,7 @@
         <td>Reset App:</td>
         <td>
           <ConfirmButton on_confirm={reset_app}>
-            Delete all settings
+            Delete Everything
           </ConfirmButton>
         </td>
       </tr>

@@ -40,9 +40,11 @@
 
 <tr class="container">
   <td class="weekday">{day.weekday}</td>
-  <td>
-    <input type="checkbox" bind:checked={day.enabled} />
-  </td>
+  {#if !$settings.minimal_mode}
+    <td>
+      <input type="checkbox" bind:checked={day.enabled} />
+    </td>
+  {/if}
   <td class="clock-time">
     <TimeInput
       bind:value={day.clock.start}
@@ -87,7 +89,7 @@
 
     .weekday {
       text-align: left;
-      width: 8rem;
+      width: 6rem;
     }
 
     .clock-time {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { settings } from "../lib/settings";
   import { format_time, OptionalTime, parse_time } from "../lib/utility";
 
   export let value: OptionalTime = null;
@@ -60,7 +61,9 @@
   {disabled}
 />
 
-<button on:click={clear} {disabled}>x</button>
+{#if !$settings.minimal_mode}
+  <button on:click={clear} {disabled}>x</button>
+{/if}
 
 <style lang="scss">
   input {

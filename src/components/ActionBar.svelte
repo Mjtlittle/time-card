@@ -20,6 +20,13 @@
     });
     days = days;
   };
+
+  // const round_leaving_time = () => {
+  //   days = days.map((day) => {
+  //     if (day_complete(day)) day.end = round_time(day.end);
+  //     return day;
+  //   });
+  // };
 </script>
 
 {#if !$settings.minimal_mode}
