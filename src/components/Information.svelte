@@ -86,7 +86,7 @@
 
     const time_group: StatGroup = [
       {
-        label: "Hours",
+        label: "Paid Hours",
         value: live_hours.toFixed(2),
         pre_value: pre_hours.toFixed(2),
       },
