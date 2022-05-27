@@ -196,6 +196,8 @@ export const live_day_hours = (day: Day, { lunch_minutes }: Settings) => {
   // take out lunch minutes
   hours -= lunch_minutes / 60;
 
+  if (hours < 0) return 0;
+
   return hours;
 };
 
