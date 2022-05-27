@@ -3,7 +3,6 @@
 
   import About from "./components/About.svelte";
   import ActionBar from "./components/ActionBar.svelte";
-  import ConfirmButton from "./components/ConfirmButton.svelte";
   import DayInput from "./components/DayInput.svelte";
   import DayProgress from "./components/DayProgress.svelte";
   import Information from "./components/Information.svelte";
@@ -13,7 +12,6 @@
     data_localstorage_key,
     Day,
     predict_week,
-    weekdays,
     work_weekdays,
   } from "./lib/utility";
   import "./styles/global.scss";
@@ -139,7 +137,7 @@
 
   <div class="toggles">
     <Preferences {reset_app} />
-    <!-- <About /> -->
+    <About />
   </div>
 
   <div class="space" />
