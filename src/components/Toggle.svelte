@@ -11,7 +11,7 @@
 
 <style lang="scss">
   details {
-    width: 30rem;
+    width: 35rem;
   }
   summary {
     margin-bottom: 0.2rem;

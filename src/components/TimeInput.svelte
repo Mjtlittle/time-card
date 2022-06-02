@@ -6,6 +6,7 @@
   export let disabled: boolean = false;
   export let shadow_time: OptionalTime = null;
   export let show_shadow: boolean = true;
+  export let default_half: "am" | "pm" = "am";
 
   type State = "passed" | "inprogress" | "future";
 
@@ -18,7 +19,7 @@
   $: populate(value);
 
   const validate_input = () => {
-    const result = parse_time(input_value);
+    const result = parse_time(input_value, { half: default_half });
     populate(result);
     value = result;
   };
@@ -50,6 +51,7 @@
 
 <input
   type="text"
+  tabindex={1}
   class:green={state == "passed"}
   class:yellow={state == "inprogress"}
   bind:this={input_element}

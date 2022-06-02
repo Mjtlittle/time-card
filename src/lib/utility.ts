@@ -38,7 +38,23 @@ export const work_weekdays: Weekday[] = [
   Weekday.Friday,
 ];
 
-export const parse_time = (time_string: string): OptionalTime => {
+interface ParseTimeOptions {
+  half: "am" | "pm";
+}
+
+const default_parsetime_options: ParseTimeOptions = {
+  half: "am",
+};
+
+export const parse_time = (
+  time_string: string,
+  options: Partial<ParseTimeOptions> = default_parsetime_options
+): OptionalTime => {
+  const full_options: ParseTimeOptions = {
+    ...default_parsetime_options,
+    ...options,
+  };
+
   time_string = time_string.trim();
 
   // get half of day
@@ -92,6 +108,12 @@ export const parse_time = (time_string: string): OptionalTime => {
 
   let time = final_hours * 60 + final_minutes;
 
+  // default half
+  if (options.half == "pm" && !saw_12hr && final_hours <= 12) {
+    saw_12hr = true;
+    is_am = false;
+  }
+
   //
   if (saw_12hr && final_hours == 12 && is_am) time -= 12 * 60;
 
@@ -115,15 +137,13 @@ export const format_time = (
   let hours = Math.floor(time / 60);
   let minutes = Math.floor(time % 60);
 
-  if (hours == 0) hours = 12;
-
   let tail = "AM";
   if (time >= 12 * 60) {
     tail = "PM";
     hours -= 12;
   }
 
-  // if (hours > 12) hours -= 12;
+  if (hours == 0) hours = 12;
 
   const hours_string = hours.toString().padStart(2, "0");
   const minutes_string = minutes.toString().padStart(2, "0");

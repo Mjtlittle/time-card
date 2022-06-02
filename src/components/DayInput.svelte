@@ -1,17 +1,13 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import DeleteIcon from "~icons/fa-solid/trash";
 
   import { settings } from "../lib/settings";
   import {
     Day,
     live_day_hours,
-    make_clock,
-    predict_week,
     range_complete,
     range_hours,
   } from "../lib/utility";
-  import Icon from "./IconButton.svelte";
   import TimeInput from "./TimeInput.svelte";
 
   export let day: Day;
@@ -20,10 +16,6 @@
   $: day, $settings.lunch_minutes, recompute_hours();
   const recompute_hours = () => {
     live_hours = live_day_hours(day, $settings);
-  };
-
-  const make_8hrs = () => {
-    day.clock = make_clock(day.clock, 8, $settings);
   };
 
   const clear = () => {
@@ -51,6 +43,7 @@
       bind:shadow_time={day.pre_clock.start}
       show_shadow={$settings.week_predictions}
       disabled={!day.enabled}
+      default_half="am"
     />
   </td>
   <td class="clock-time">
@@ -59,6 +52,7 @@
       bind:shadow_time={day.pre_clock.end}
       show_shadow={$settings.week_predictions}
       disabled={!day.enabled}
+      default_half="pm"
     />
   </td>
   <td class="hours">

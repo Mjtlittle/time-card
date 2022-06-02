@@ -65,11 +65,45 @@ describe("make_clock()", () => {
   expect_clock(["8 AM", "5 PM"], 8, ["8 AM", "4:40 PM"]);
 });
 
+describe("format_time()", () => {
+  const expect_parse_format = (text, expected) =>
+    it(`${text} => ${expected}`, () =>
+      expect(format_time(parse_time(text))).toBe(expected));
+
+  expect_parse_format("1am", "01:00 AM");
+  expect_parse_format("2am", "02:00 AM");
+  expect_parse_format("12:30pm", "12:30 PM");
+  expect_parse_format("12:00pm", "12:00 PM");
+});
+
 describe("Format <-> Parse", () => {
-  for (let i = 0; i < 1000; i += 5) {
+  for (let i = 0; i < 60 * 24; i += 5) {
     const formatted = format_time(i, true);
     const parse = parse_time(formatted);
 
     it(`${i} -> ${formatted} -> ${parse}`, () => expect(parse).toBe(i));
+  }
+});
+
+describe("default pm parse", () => {
+  const expect_am_converging = (a: string, b: string) =>
+    it(`'${a}' == '${b}'`, () => {
+      expect(parse_time(a, { half: "am" })).toBe(parse_time(b));
+    });
+
+  const expect_pm_converging = (a: string, b: string) =>
+    it(`'${a}' == '${b}'`, () => {
+      expect(parse_time(a, { half: "pm" })).toBe(parse_time(b));
+    });
+
+  for (let i = 0; i < 12; i++) {
+    expect_am_converging(`${i}`, `${i}:00 AM`);
+    expect_pm_converging(`${i}`, `${i}:00 PM`);
+
+    for (let m = 0; m < 60; m++) {
+      const min = m.toString().padStart(2, "0");
+      expect_am_converging(`${i}:${min}`, `${i}:${min} AM`);
+      expect_pm_converging(`${i}:${min}`, `${i}:${min} PM`);
+    }
   }
 });

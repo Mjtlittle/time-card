@@ -5,6 +5,7 @@
   import ActionBar from "./components/ActionBar.svelte";
   import DayInput from "./components/DayInput.svelte";
   import DayProgress from "./components/DayProgress.svelte";
+  import DayStatusButtonDemo from "./components/DayStatusButtonDemo.svelte";
   import Information from "./components/Information.svelte";
   import Preferences from "./components/Preferences.svelte";
   import { default_settings, settings } from "./lib/settings";
@@ -138,6 +139,7 @@
   <div class="toggles">
     <Preferences {reset_app} />
     <About />
+    <DayStatusButtonDemo />
   </div>
 
   <div class="space" />

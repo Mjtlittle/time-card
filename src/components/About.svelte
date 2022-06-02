@@ -1,4 +1,6 @@
 <script lang="ts">
+  import DayStatusButton from "./DayStatusButton.svelte";
+  import DayStatusButtonDemo from "./DayStatusButtonDemo.svelte";
   import Toggle from "./Toggle.svelte";
 </script>
 
@@ -21,8 +23,8 @@
   </ul>
   <p>
     After typing the value, click the enter key or leave the field to change the
-    value. At the moment any 12 hour times not specifing AM or PM will default
-    to AM.
+    value. 12 hour times not specifing AM or PM will default to AM for clock-in
+    and PM for clock-out.
   </p>
   <p>
     If you have the <strong>Suggestions</strong> feature on, gray time
@@ -55,4 +57,32 @@
       href="https://github.com/Mjtlittle/time-card/issues">here</a
     > or message me.
   </p>
+
+  <h2>Changelog</h2>
+
+  <h3>Verson 3 (May 31, 2022):</h3>
+  <ul>
+    <li>Made clock-out column default to PM if PM/AM is not provided</li>
+    <li>Fixed issue formatting times: "12:** PM" (=> 00:** PM)</li>
+    <li>Added tabindex to each time input, allows for tab to next clock</li>
+  </ul>
+
+  <h3>Verson 2 (May 27, 2022):</h3>
+  <ul>
+    <li>Fully rewrote UI</li>
+    <li>Replaced the time entry field component</li>
+    <ul>
+      <li>Exclusivly text based entry, no clickable UI anymore</li>
+      <li>Custom formatter and parser</li>
+    </ul>
+    <li>Added live inline time predictions</li>
+    <li>Toggle days to remove them from being considered</li>
+    <li>Added a minimal interface mode</li>
+  </ul>
+
+  <h3>Verson 1 (May 17, 2022):</h3>
+  <ul>
+    <li>"Fill Week" button to populate predictions into table</li>
+    <li>Calculate current hours</li>
+  </ul>
 </Toggle>
