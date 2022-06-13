@@ -23,6 +23,4 @@
     Click the icon above. Thoughts on this instead of checkbox for each day?
     Currently the disabling a day does not count its time.
   </p>
-
-  <p>Also is the "Take Suggestion" button even useful?</p>
 </Toggle>

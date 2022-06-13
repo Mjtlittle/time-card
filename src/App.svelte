@@ -110,7 +110,9 @@
   </div>
 
   <Information bind:days />
-  <DayProgress bind:days />
+  {#if !$settings.minimal_mode}
+    <DayProgress bind:days />
+  {/if}
 
   <div class="table">
     <table>

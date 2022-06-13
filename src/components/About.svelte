@@ -60,6 +60,15 @@
 
   <h2>Changelog</h2>
 
+  <h3>Verson 4 (Jun 13, 2022):</h3>
+  <ul>
+    <li>Made the progress bar more useful</li>
+    <ul>
+      <li>Now shows progress through current day</li>
+      <li>Shows percent of each day among the total amount of hours</li>
+    </ul>
+  </ul>
+
   <h3>Verson 3 (May 31, 2022):</h3>
   <ul>
     <li>Made clock-out column default to PM if PM/AM is not provided</li>
