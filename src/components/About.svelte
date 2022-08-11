@@ -1,7 +1,20 @@
 <script lang="ts">
+  import { onDestroy } from "svelte";
+
+  import { settings } from "../lib/settings";
+  import { format_time, get_now } from "../lib/utility";
   import DayStatusButton from "./DayStatusButton.svelte";
   import DayStatusButtonDemo from "./DayStatusButtonDemo.svelte";
   import Toggle from "./Toggle.svelte";
+
+  // parse_time('now') demo
+  let current_time_string = "---";
+  const time_string_interval = setInterval(() => {
+    current_time_string = format_time(get_now(), $settings.twelve_hour_time);
+  });
+  onDestroy(() => {
+    clearInterval(time_string_interval);
+  });
 </script>
 
 <Toggle label="About">
@@ -20,6 +33,7 @@
     <li>5 => 5:00 AM</li>
     <li>5a => 5:00 AM</li>
     <li>5am => 5:00 AM</li>
+    <li>now => {current_time_string} <i>(the current time)</i></li>
   </ul>
   <p>
     After typing the value, click the enter key or leave the field to change the
@@ -59,6 +73,11 @@
   </p>
 
   <h2>Changelog</h2>
+
+  <h3>Verson 5 ():</h3>
+  <ul>
+    <li>Can now enter "now" for the current time</li>
+  </ul>
 
   <h3>Verson 4 (Jun 13, 2022):</h3>
   <ul>

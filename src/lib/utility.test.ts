@@ -1,12 +1,20 @@
 import { assert, describe, expect, it, test } from "vitest";
 
 import { default_settings, Settings } from "./settings";
-import { format_time, make_clock, parse_time, TimeRange } from "./utility";
+import {
+  format_time,
+  get_now,
+  make_clock,
+  parse_time,
+  TimeRange,
+} from "./utility";
 
 describe("parse_time()", () => {
   const expect_pt = (time_string: string, expected: number | null) =>
     it(`${time_string} -> ${format_time(expected)}`, () =>
       expect(parse_time(time_string)).toBe(expected));
+
+  expect_pt("now", get_now());
 
   expect_pt("12:00", 12 * 60);
   expect_pt("12", 12 * 60);

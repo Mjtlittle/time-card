@@ -57,6 +57,9 @@ export const parse_time = (
 
   time_string = time_string.trim();
 
+  // make it now
+  if (time_string == "now") return get_now();
+
   // get half of day
   const _remove_suffixes_and_do = (
     str: string,
@@ -109,7 +112,7 @@ export const parse_time = (
   let time = final_hours * 60 + final_minutes;
 
   // default half
-  if (options.half == "pm" && !saw_12hr && final_hours <= 12) {
+  if (full_options.half == "pm" && !saw_12hr && final_hours <= 12) {
     saw_12hr = true;
     is_am = false;
   }
@@ -145,6 +148,9 @@ export const format_time = (
 
   if (hours == 0) hours = 12;
 
+  // todo: implement 24 hour preference
+
+  // todo: dont pad if not 24 hour
   const hours_string = hours.toString().padStart(2, "0");
   const minutes_string = minutes.toString().padStart(2, "0");
 

@@ -106,6 +106,13 @@
           </ConfirmButton>
         </td>
       </tr>
+      <!-- <tr>
+        <td>Data Copy to Clipboard: </td>
+        <td>
+          <button>Export</button>
+          <ConfirmButton>Import</ConfirmButton>
+        </td>
+      </tr> -->
     </tbody>
   </table>
 </Toggle>
